@@ -15,6 +15,7 @@
   };
   Drilldown.prototype._init = function(){
     this.$submenuAnchors = this.$element.find('li.has-submenu');
+    this.$otherSubmenuAnchors = this.$element.find('li').not('.has-submenu');
     this.$submenus = this.$submenuAnchors.children('[data-submenu]').addClass('is-drilldown-sub')/*.wrap($(this.options.wrapper).addClass('is-drilldown-sub'))*/;
     // this.$rootElems = this.$element.children('[data-submenu]')/*.addClass('first-sub')*/;
     this.$menuItems = this.$element.find('li').not('.js-drilldown-back').attr('role', 'menuitem');
@@ -29,10 +30,23 @@
     if(!this.options.holdOpen){
       this._menuLinkEvents();
     }
+    // console.log(this.$otherSubmenuAnchors)  
+    this.$otherSubmenuAnchors.each(function() {
+    var $otherSub = $(this);
+        $otherSub.on('click mousedown.zf.drilldown tap.zf.drilldown touchend.zf.drilldown', function(e){ 
+		  e.preventDefault();
+      });
+        
+    });
+      
     // console.log(this.$submenuAnchors);
     this.$submenuAnchors.each(function(){
       // this.removeAttribute('href');
+ 
       var $sub = $(this);
+	  $sub.on('click mousedown.zf.drilldown tap.zf.drilldown touchend.zf.drilldown', function(e){ 
+		  e.preventDefault();
+      });
       $sub.find('a')[0];//.removeAttribute('href');
       $sub.children('[data-submenu]')
           .attr({
@@ -101,16 +115,18 @@
             $elem.removeClass('is-active is-closing').off('transitionend.zf.drilldown');
           });
         });
-  }
+  } 
   Drilldown.prototype._menuLinkEvents = function(){
     var _this = this;
 	var linkRelativityTest = new RegExp('^(?:[a-z]+:)?//', 'i');
     this.$menuItems.not('.has-submenu')
         .off('mousedown.zf.drilldown tap.zf.drilldown touchend.zf.drilldown')
         .on('mousedown.zf.drilldown tap.zf.drilldown touchend.zf.drilldown', function(e){
+        e.preventDefault();
+        console.log($(this));
           // console.log('random link mouse event');
 		// Can place an if statement here to see if the element has a link to somewhere that is either relative or not and link to it if needed (could be an added feature)  
-        e.preventDefault();
+        
          if(linkRelativityTest.test($(this).children('a').attr('href'))) {
           //  window.location.href = $(this).children('a').attr('href');
             console.log($(this).children('a').attr('href') + " - not relative link");
