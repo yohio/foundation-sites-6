@@ -33,7 +33,7 @@
     this.$submenuAnchors.each(function(){
       // this.removeAttribute('href');
       var $sub = $(this);
-      $sub.find('a')[0].removeAttribute('href');
+      $sub.find('a')[0];//.removeAttribute('href');
       $sub.children('[data-submenu]')
           .attr({
             'aria-hidden': true,
@@ -104,10 +104,19 @@
   }
   Drilldown.prototype._menuLinkEvents = function(){
     var _this = this;
+	var linkRelativityTest = new RegExp('^(?:[a-z]+:)?//', 'i');
     this.$menuItems.not('.has-submenu')
         .off('mousedown.zf.drilldown tap.zf.drilldown touchend.zf.drilldown')
         .on('mousedown.zf.drilldown tap.zf.drilldown touchend.zf.drilldown', function(e){
           // console.log('random link mouse event');
+		// Can place an if statement here to see if the element has a link to somewhere that is either relative or not and link to it if needed (could be an added feature)  
+        e.preventDefault();
+         if(linkRelativityTest.test($(this).children('a').attr('href'))) {
+          //  window.location.href = $(this).children('a').attr('href');
+            console.log($(this).children('a').attr('href') + " - not relative link");
+        } else {
+            console.log($(this).children('a').attr('href') + " - relative link");
+        }
           e.stopImmediatePropagation();
           setTimeout(function(){
             _this._hideAll();
