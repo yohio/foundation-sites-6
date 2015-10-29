@@ -2,9 +2,9 @@
  * Slider module.
  * @module foundation.slider
  * @requires foundation.util.animationFrame
- * @requires foundation.util.randomId
  * @requires foundation.util.triggers
  * @requires foundation.util.keyboard
+ * @requires foundation.util.addtouch
  */
 !function($, Foundation){
   'use strict';
@@ -19,8 +19,6 @@
   Slider.defaults = {
     start: 0,
     end: 100,
-    // min: start,
-    // max: end,
     step: 1,
     initialStart: 0,
     initialEnd: 100,
@@ -65,7 +63,7 @@
       }
       isDbl = true;
 
-      this._setHandlePos(this.$handle, this.options.initialStart, 'wtf', function(){
+      this._setHandlePos(this.$handle, this.options.initialStart, function(){
 
         _this._setHandlePos(_this.$handle2, _this.options.initialEnd);
       });
@@ -81,7 +79,7 @@
     this.$element.trigger('init.zf.slider');
   };
 
-  Slider.prototype._setHandlePos = function($hndl, location, str, cb){//location is a number value between the `start` and `end` values of the slider bar.
+  Slider.prototype._setHandlePos = function($hndl, location, cb){//location is a number value between the `start` and `end` values of the slider bar.
   //might need to alter that slightly for bars that will have odd number selections.
     // console.log(str, cb);
     location = parseFloat(location);//on input change events, convert string to number...grumble.
@@ -330,15 +328,12 @@
 
   Foundation.plugin(Slider);
 
-  function percent(frac, num, dec){
+  function percent(frac, num){
     return (frac / num);
   }
   function absPosition($handle, dir, clickPos, param){
     return Math.abs(($handle.position()[dir] + ($handle[param]() / 2)) - clickPos);
   }
-  // $.fn.hasAttr = function(name) {
-  //    return this.attr(name) !== undefined;
-  // };
 }(jQuery, window.Foundation);
 
 //*********this is in case we go to static, absolute positions instead of dynamic positioning********

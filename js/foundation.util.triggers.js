@@ -6,7 +6,7 @@
   });
 
   // Elements with [data-close] will close a plugin that supports it when clicked.
-  // If used without a value on [data-open], the event will bubble, allowing it to close a parent component.
+  // If used without a value on [data-close], the event will bubble, allowing it to close a parent component.
   $(document).on('click.zf.trigger', '[data-close]', function() {
     var id = $(this).data('close');
     if (id) {
@@ -95,7 +95,7 @@
   //******** only fires this function once on load, if there's something to watch ********
   function closemeListener(pluginName){
     var yetiBoxes = $('[data-yeti-box]'),
-    plugNames = ['dropdown', 'tooltip', 'orbit'];
+        plugNames = ['dropdown', 'tooltip', 'orbit'];
 
     if(pluginName){
       if(typeof pluginName === 'string'){
@@ -111,12 +111,13 @@
         return 'closeme.zf.' + name;
       }).join(' ');
 
-      $(window).on(listeners, function(e, pluginId){
+      $(window).off(listeners).on(listeners, function(e, pluginId){
         var plugin = e.namespace.split('.')[0];
-        var plugins = $('[data-' + plugin + ']').not('[data-yeti-box=' + pluginId + ']');
+        var plugins = $('[data-' + plugin + ']').not('[data-yeti-box="' + pluginId + '"]');
 
         plugins.each(function(){
           var _this = $(this);
+          // console.log(_this);
           _this.triggerHandler('close.zf.trigger', [_this]);
         });
 
@@ -137,7 +138,7 @@
               var $elem = $(nodes[i])
               $elem.triggerHandler('resizeme.zf.trigger', [$elem]);
             }
-          }, debounce || 150);//default time to emit resize event
+          }, debounce || 10);//default time to emit resize event
       });
     }
   }
@@ -155,7 +156,7 @@
               var $elem = $(nodes[i])
               $elem.triggerHandler('scrollme.zf.trigger', [$elem]);
             }
-          }, debounce || 150);//default time to emit scroll event
+          }, debounce || 50);//default time to emit scroll event
       });
     }
   }

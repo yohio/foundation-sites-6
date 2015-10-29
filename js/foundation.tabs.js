@@ -1,3 +1,8 @@
+/**
+ * Tabs module.
+ * @module foundation.tabs
+ * @requires foundation.util.keyboard
+ */
 !function($, Foundation) {
   'use strict';
 
@@ -23,7 +28,7 @@
   Tabs.defaults = {
     deepLinking: false,
     scrollToContent: false,
-    autoFocus: true,
+    autoFocus: false,
     wrapOnKeys: true
   };
 
