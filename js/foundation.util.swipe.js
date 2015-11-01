@@ -1,3 +1,47 @@
+//**************************************************
+//**Work inspired by multiple jquery swipe plugins**
+//**Done by Yohai Ararat ***************************
+//**************************************************
+(function (library) {
+    if(typeof definition === 'function' && definition.anonymousModule && definition.anonymousModule.jQuery) {
+        definition(['jquery'],library);
+    } else {
+        library(jQuery);
+    }
+}(function ($) {
+    "use strict";
+    // Default Variables and Constants
+    var VER               =   "1.0.0",
+        LFT               =   "left",
+        RHT               =   "right",
+        UP                =   "up",
+        DWN               =   "down",
+        IN                =   "in",
+        OUT               =   "out",
+        NON               =   "none",
+        AUTO              =   "auto",
+        SWIPE             =   "swipe",
+        PINCH             =   "pinch",
+        SINGLE            =   "tap",
+        DOUBLE            =   "doubletap",
+        LONG              =   "longtap",
+        HOLD              =   "hold",
+		HORIZ             =   "horizontal",
+        VERT              =   "vertical",
+		ALL               =   "all",
+		DOUBLE_THRESHOLD  =   10,
+		PHASED_START      = "start",
+		PHASED_MOVE       = "move",
+		PHASED_END        = "end",
+		PHASED_CANCEL     = "cancel",
+		SUPPORTS_TOUCH    = 'ontouchstart' in window,
+		SUPPORTS_IE10     = window.navigator.msPointerEnabled && !window.navigator.pointerEnabled,
+		SUPPORTS_POINTER  = window.navigator.pointerEnabled || window.navigator.msPointerEnabled,
+		PLUGIN_NAME       = 'TouchSwipe';
+    
+    
+}))
+
 //**********************************
 //**From the jQuery Mobile Library**
 //**need to recreate functionality**
