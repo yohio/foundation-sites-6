@@ -2,51 +2,82 @@
 //**Work inspired by multiple jquery swipe plugins**
 //**Done by Yohai Ararat ***************************
 //**************************************************
-(function (library) {
-    if(typeof definition === 'function' && definition.anonymousModule && definition.anonymousModule.jQuery) {
-        definition(['jquery'],library);
-    } else {
-        library(jQuery);
+(function($) {
+
+  $.spotSwipe = {
+    version: '1.0.0',
+    enabled: 'ontouchstart' in document.documentElement,
+    preventDefault: true,
+    threshold: 75
+  };
+
+  var startPosX,
+    startPosY,
+    isMoving = false;
+
+  function onTouchEnd() {
+    this.removeEventListener('touchmove', onTouchMove);
+    this.removeEventListener('touchend', onTouchEnd);
+    isMoving = false;
+  }
+
+  function onTouchMove(e) {
+    if ($.spotSwipe.preventDefault) { e.preventDefault(); }
+    if(isMoving) {
+      var x = e.touches[0].pageX;
+      var y = e.touches[0].pageY;
+      var dx = startPosX - x;
+      var dy = startPosY - y;
+      var dir;
+      if(Math.abs(dx) >= $.spotSwipe.threshold) {
+        dir = dx > 0 ? 'left' : 'right'
+      }
+      else if(Math.abs(dy) >= $.spotSwipe.threshold) {
+        dir = dy > 0 ? 'down' : 'up'
+      }
+      if(dir) {
+        onTouchEnd.call(this);
+        $(this).trigger('swipe', dir).trigger('swipe' + dir);
+      }
     }
-}(function ($) {
-    "use strict";
-    // Default Variables and Constants
-    var VER               =   "1.0.0",
-        LFT               =   "left",
-        RHT               =   "right",
-        UP                =   "up",
-        DWN               =   "down",
-        IN                =   "in",
-        OUT               =   "out",
-        NON               =   "none",
-        AUTO              =   "auto",
-        SWIPE             =   "swipe",
-        PINCH             =   "pinch",
-        SINGLE            =   "tap",
-        DOUBLE            =   "doubletap",
-        LONG              =   "longtap",
-        HOLD              =   "hold",
-		HORIZ             =   "horizontal",
-        VERT              =   "vertical",
-		ALL               =   "all",
-		DOUBLE_THRESHOLD  =   10,
-		PHASED_START      = "start",
-		PHASED_MOVE       = "move",
-		PHASED_END        = "end",
-		PHASED_CANCEL     = "cancel",
-		SUPPORTS_TOUCH    = 'ontouchstart' in window,
-		SUPPORTS_IE10     = window.navigator.msPointerEnabled && !window.navigator.pointerEnabled,
-		SUPPORTS_POINTER  = window.navigator.pointerEnabled || window.navigator.msPointerEnabled,
-		PLUGIN_NAME       = 'TouchSwipe';
-    
-    
-}))
+  }
+
+  function onTouchStart(e) {
+    if (e.touches.length == 1) {
+      startPosX = e.touches[0].pageX;
+      startPosY = e.touches[0].pageY;
+      isMoving = true;
+      this.addEventListener('touchmove', onTouchMove, false);
+      this.addEventListener('touchend', onTouchEnd, false);
+    }
+  }
+
+  function init() {
+    this.addEventListener && this.addEventListener('touchstart', onTouchStart, false);
+  }
+
+  function teardown() {
+    this.removeEventListener('touchstart', onTouchStart);
+  }
+
+  $.event.special.swipe = { setup: init };
+
+  $.each(['left', 'up', 'down', 'right'], function () {
+    $.event.special['swipe' + this] = { setup: function(){
+      $(this).on('swipe', $.noop);
+    } };
+  });
+})(jQuery);
 
 //**********************************
 //**From the jQuery Mobile Library**
 //**need to recreate functionality**
 //**and try to improve if possible**
 //**********************************
+
+/* Removing the jQuery function ****
+************************************
+
 (function( $, window, undefined ) {
 
 	var $document = $( document ),
@@ -268,3 +299,4 @@
 		};
 	});
 })( jQuery, this );
+*/
