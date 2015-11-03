@@ -16,6 +16,7 @@
     isMoving = false;
 
   function onTouchEnd() {
+    //  alert(this);
     this.removeEventListener('touchmove', onTouchMove);
     this.removeEventListener('touchend', onTouchEnd);
     isMoving = false;
