@@ -8,12 +8,15 @@
     version: '1.0.0',
     enabled: 'ontouchstart' in document.documentElement,
     preventDefault: true,
-    threshold: 75
+    moveThreshold: 75,
+    timeThreshold: 200
   };
 
-  var startPosX,
-    startPosY,
-    isMoving = false;
+  var   startPosX,
+        startPosY,
+        startTime,
+        elapsedTime,
+        isMoving = false;
 
   function onTouchEnd() {
     //  alert(this);
@@ -30,10 +33,11 @@
       var dx = startPosX - x;
       var dy = startPosY - y;
       var dir;
-      if(Math.abs(dx) >= $.spotSwipe.threshold) {
+      elapsedTime = new Date().getTime() - startTime;
+      if(Math.abs(dx) >= $.spotSwipe.moveThreshold && elapsedTime <= $.spotSwipe.timeThreshold) {
         dir = dx > 0 ? 'left' : 'right'
       }
-      else if(Math.abs(dy) >= $.spotSwipe.threshold) {
+      else if(Math.abs(dy) >= $.spotSwipe.moveThreshold && elapsedTime <= $.spotSwipe.timeThreshold) {
         dir = dy > 0 ? 'down' : 'up'
       }
       if(dir) {
@@ -48,6 +52,7 @@
       startPosX = e.touches[0].pageX;
       startPosY = e.touches[0].pageY;
       isMoving = true;
+      startTime = new Date().getTime()
       this.addEventListener('touchmove', onTouchMove, false);
       this.addEventListener('touchend', onTouchEnd, false);
     }
